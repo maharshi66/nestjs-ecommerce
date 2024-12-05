@@ -1,24 +1,15 @@
 {
   "$schema": "https://json.schemastore.org/nest-cli",
   "collection": "@nestjs/schematics",
-  "sourceRoot": "apps/ecommerce/src",
+  "sourceRoot": "apps/order-management/src",
   "compilerOptions": {
     "deleteOutDir": true,
     "webpack": true,
-    "tsConfigPath": "apps/ecommerce/tsconfig.app.json"
+    "tsConfigPath": "apps/order-management/tsconfig.app.json"
   },
   "monorepo": true,
-  "root": "apps/ecommerce",
+  "root": "apps/order-management",
   "projects": {
-    "ecommerce": {
-      "type": "application",
-      "root": "apps/ecommerce",
-      "entryFile": "main",
-      "sourceRoot": "apps/ecommerce/src",
-      "compilerOptions": {
-        "tsConfigPath": "apps/ecommerce/tsconfig.app.json"
-      }
-    },
     "order-management": {
       "type": "application",
       "root": "apps/order-management",
@@ -44,6 +35,15 @@
       "sourceRoot": "apps/invoice-service/src",
       "compilerOptions": {
         "tsConfigPath": "apps/invoice-service/tsconfig.app.json"
+      }
+    },
+    "api-gateway": {
+      "type": "application",
+      "root": "apps/api-gateway",
+      "entryFile": "main",
+      "sourceRoot": "apps/api-gateway/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/api-gateway/tsconfig.app.json"
       }
     }
   }
