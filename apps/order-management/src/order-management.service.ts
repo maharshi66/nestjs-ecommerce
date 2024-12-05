@@ -11,10 +11,35 @@ export class OrderManagementService {
   async handleOrderPlaced(order: CreateOrderDto) {
     console.log(`Received a new order - customer: ${order}`);
 
-    const customerDetails = await this.customerClient.send(MESSAGE_PATTERNS.GET_CUSTOMER_DETAILS, 'CUST01').toPromise();
+    const customerDetails = await this.customerClient.send(MESSAGE_PATTERNS.GET_CUSTOMER_DETAILS, order.customerId).toPromise();
     console.log('Customer details:', customerDetails);
 
-    const inventoryDetails = await this.inventoryClient.send(MESSAGE_PATTERNS.GET_INVENTORY_DETAILS, 'INV01').toPromise();
+    const inventoryDetails = await this.inventoryClient.send(MESSAGE_PATTERNS.GET_INVENTORY_DETAILS, order.items).toPromise();
     console.log('Inventory details:', inventoryDetails);
+
+    const products = inventoryDetails.map((inventory) => {
+      const { id, requested_quantity } = inventory;
+      return {
+        product_id: id,
+        product_name: inventory.name,
+        quantity: requested_quantity,
+        unit_price: inventory.unit_price,
+      };
+    });
+
+    // Calculate total amount
+    const totalAmount = products.reduce(
+      (total, product) => total + product.quantity * product.unit_price,
+      0,
+    );
+
+    const orderToStore = {
+      customer_id: customerDetails.id,
+      products,
+      total_amount: totalAmount,
+    };
+
+    console.log('Order to store in DB:', orderToStore);
+    // await this.orderRepository.save(orderToStore);
   }
 }

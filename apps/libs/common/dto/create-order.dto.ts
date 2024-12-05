@@ -3,7 +3,7 @@ import { IsString, IsArray, ValidateNested, IsOptional, IsNotEmpty } from 'class
 
 export class CreateOrderDto {
     @IsString()
-    @IsNotEmpty()
+    @IsOptional()
     customerId: string;
 
     @IsArray()

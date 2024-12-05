@@ -9,6 +9,6 @@ export class OrderManagementController {
   @Post('')
   createOrder(@Body() createOrderDto: CreateOrderDto) {
     console.log('Received Order Creation request:', createOrderDto);
-    return this.orderManagementService.createOrder(createOrderDto);
+    return this.orderManagementService.createOrder(createOrderDto, 'mockToken');
   }
 }
