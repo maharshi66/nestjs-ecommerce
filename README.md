@@ -1,89 +1,48 @@
-## Description
+# NestJS Microservices Architecture
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+This monorepo project is a microservices-based architecture implemented using **NestJS**. It features services that communicate asynchronously through **RabbitMQ** and an **API Gateway** that acts as the entry point for external requests.
 
-## Project setup
+---
 
-```bash
-$ npm install
+## Project Overview
+
+- **Microservices** with async communication using RabbitMQ.
+- An **API Gateway** for handling client requests and forwarding them to the appropriate services.
+- Modular structure for scalability and maintainability.
+- The foundation for building a robust, production-ready application.
+
+### Scope
+
+1. **API Gateway**
+
+   - Listens to HTTP requests and forwards them to message queues/microservices.
+
+2. **Order Management Service**
+
+   - Processes order-related messages from RabbitMQ.
+   - Interacts with other services (e.g., Customer and Inventory) for data aggregation.
+
+3. **Customer Service**
+
+   - Provides customer details based on incoming requests.
+
+4. **Inventory Service**
+   - Responds with product/stock details.
+
+---
+
+## Folder Structure
+
+```plaintext
+nestjs-microservices/
+├── apps/
+│   ├── api-gateway/       # Handles external HTTP requests
+│   ├── order-management-service/     # Handles order-related processing
+│   ├── customer-service/  # Provides customer-related data [MOCKED Response]
+│   ├── inventory-service/ # Manages inventory-related data [MOCKED Response]
+├── libs/
+│   ├── common/            # Shared utilities, constants, and DTOs
+├── docker-compose.yml     # RabbitMQ and other services setup
+├── README.md              # Project documentation
+└── package.json           # Project dependencies and scripts
 ```
-
-## Compile and run the project
-
-```bash
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
-```
-
-## Run tests
-
-```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
-```
-
-## Deployment
-
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
-
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
-
-```bash
-$ npm install -g mau
-$ mau deploy
-```
-
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
-
-## Resources
-
-Check out a few resources that may come in handy when working with NestJS:
-
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
-
-Todo:
-- Fix issue with interservice communication
-  - Wait for response vs. fire and forget
-- DB, entities, DTOs
-- Complete all CRUD operations (Create, Update, Delete)
-- ENV and config service setup
-- Guards, Interceptors, libs/common
-- Documentation
-  - App and repo structure
-  - Deployment plan (Github Actions + ECS)
-  - System Design for scalability, high availability and security
-  - Known limitations
-  - What would you do if given more time
