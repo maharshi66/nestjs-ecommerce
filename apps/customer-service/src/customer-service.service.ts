@@ -1,8 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { MessagePattern } from '@nestjs/microservices';
+import { MESSAGE_PATTERNS } from 'apps/libs/common/constants/patterns';
 @Injectable()
 export class CustomerServiceService {
-  @MessagePattern('get.customer') // Respond to customer detail requests
+  @MessagePattern(MESSAGE_PATTERNS.GET_CUSTOMER_DETAILS) // Respond to customer detail requests
   async getCustomerDetails(customerId: string) {
     console.log('Customer Service received request for:', customerId);
 

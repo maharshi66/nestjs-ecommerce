@@ -28,15 +28,6 @@
         "tsConfigPath": "apps/customer-service/tsconfig.app.json"
       }
     },
-    "invoice-service": {
-      "type": "application",
-      "root": "apps/invoice-service",
-      "entryFile": "main",
-      "sourceRoot": "apps/invoice-service/src",
-      "compilerOptions": {
-        "tsConfigPath": "apps/invoice-service/tsconfig.app.json"
-      }
-    },
     "api-gateway": {
       "type": "application",
       "root": "apps/api-gateway",
@@ -44,6 +35,15 @@
       "sourceRoot": "apps/api-gateway/src",
       "compilerOptions": {
         "tsConfigPath": "apps/api-gateway/tsconfig.app.json"
+      }
+    },
+    "inventory-service": {
+      "type": "application",
+      "root": "apps/inventory-service",
+      "entryFile": "main",
+      "sourceRoot": "apps/inventory-service/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/inventory-service/tsconfig.app.json"
       }
     }
   }
