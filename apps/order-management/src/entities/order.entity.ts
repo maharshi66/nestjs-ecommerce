@@ -1,12 +1,5 @@
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
-import { OrderLineItem } from './order-line-item.entity';
-
-export enum OrderStatus {
-  PROCESSING = 'PROCESSING',
-  CANCELED = 'CANCELED',
-  DELIVERED = 'DELIVERED',
-}
-
+import { OrderStatus } from '../../../libs/common/constants/order-status';
 @Entity()
 export class Order {
   @PrimaryGeneratedColumn('uuid')

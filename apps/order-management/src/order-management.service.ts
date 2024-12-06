@@ -3,11 +3,12 @@ import { ClientProxy } from '@nestjs/microservices';
 import { MESSAGE_PATTERNS } from 'apps/libs/common/constants/patterns';
 import { CUSTOMER_SERVICE, INVENTORY_SERVICE } from 'apps/libs/common/constants/services';
 import { CreateOrderDto } from 'apps/libs/common/dto/create-order.dto';
+import { UpdateOrderDto } from 'apps/libs/common/dto/update-order.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DataSource, Repository } from 'typeorm';
-import { Order, OrderStatus } from './entities/order.entity';
+import { Order } from './entities/order.entity';
 import { OrderLineItem } from './entities/order-line-item.entity';
-
+import { OrderStatus } from 'apps/libs/common/constants/order-status';
 @Injectable()
 export class OrderManagementService {
   constructor(
@@ -18,7 +19,7 @@ export class OrderManagementService {
     private readonly dataSource: DataSource,
   ) {}
 
-  async handleOrderPlaced(order: CreateOrderDto) {
+  async handleCreateOrder(order: CreateOrderDto) {
     console.log(`Received a new order - customer: ${order}`);
 
     const customerDetails = await this.customerClient.send(MESSAGE_PATTERNS.GET_CUSTOMER_DETAILS, order.customerId).toPromise();
@@ -85,6 +86,56 @@ export class OrderManagementService {
       throw error;
     } finally {
       await queryRunner.release();
+    }
+  }
+
+  async handleOrderUpdate(updateOrderDto: UpdateOrderDto) {
+    const { orderId } = updateOrderDto;
+    console.log(`Updating order - ID: ${orderId}, update: ${updateOrderDto}`);
+
+    try {
+      const order = await this.orderRepository.findOne({ where: { id: orderId } });
+
+      if (!order) {
+        throw new Error(`Order with ID ${orderId} not found`);
+      }
+
+      if (updateOrderDto.status) {
+        order.status = updateOrderDto.status;
+      }
+
+      if (updateOrderDto.trackingNumber) {
+        order.tracking_number = updateOrderDto.trackingNumber;
+      }
+
+      if (updateOrderDto.trackingCompany) {
+        order.tracking_company = updateOrderDto.trackingCompany;
+      }
+
+      const updatedOrder = await this.orderRepository.save(order);
+      console.log('Order updated:', updatedOrder);
+    } catch (error) {
+      console.error('Error updating order:', error.message);
+      throw error;
+    }
+  }
+
+  async handleDeleteOrder(deleteOrderDto: any) {
+    const { orderId } = deleteOrderDto;
+    console.log(`Deleting order - ID: ${orderId}`);
+
+    try {
+      const order = await this.orderRepository.findOne({ where: { id: orderId } });
+
+      if (!order) {
+      throw new Error(`Order with ID ${orderId} not found`);
+      }
+
+      await this.orderRepository.remove(order);
+      console.log(`Order with ID ${orderId} deleted successfully.`);
+    } catch (error) {
+      console.error('Error deleting order:', error.message);
+      throw error;
     }
   }
 }

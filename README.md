@@ -1,4 +1,4 @@
-# NestJS Microservices Architecture
+# NestJS+TS Based eCommerce Project
 
 This monorepo project is a microservices-based architecture implemented using **NestJS**. It features services that communicate asynchronously through **RabbitMQ** and an **API Gateway** that acts as the entry point for external requests. This ecommerce project is designed with scalability in mind to handle millions of orders efficiently.
 
@@ -10,6 +10,7 @@ This monorepo project is a microservices-based architecture implemented using **
 - [Scope](#scope)
 - [Example Flow: Create Order](#example-flow-create-order)
 - [Folder Structure](#folder-structure)
+- [Author](#author)
 
 ---
 
@@ -70,3 +71,8 @@ nestjs-microservices/
 └── package.json           # Project dependencies and scripts
 ```
 
+---
+
+## Author
+
+- Maharshi Shah
