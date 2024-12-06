@@ -9,7 +9,7 @@ export class InventoryServiceController {
 
   //*Respond to inventory requests - MOCKED
   @MessagePattern(MESSAGE_PATTERNS.GET_INVENTORY_DETAILS)
-    async getInventoryDetails(productIds: string[]) {
-    return this.inventoryService.getInventoryDetails(productIds);
+    async getInventoryDetails(items: { productId: string, quantity: number }[]) {
+    return this.inventoryService.getInventoryDetails(items);
   }
 }

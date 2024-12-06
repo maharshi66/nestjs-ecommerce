@@ -3,17 +3,26 @@ import { OrderManagementService } from './order-management.service';
 import { OrderManagementController } from './order-management.controller';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { ORDER_MANAGEMENT_SERVICE } from 'apps/libs/common/constants/services';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 
 @Module({
   imports: [
-    ClientsModule.register([
+    ConfigModule.forRoot({
+      isGlobal: true,
+      envFilePath: ['.env'],
+    }),
+    ClientsModule.registerAsync([
       {
         name: ORDER_MANAGEMENT_SERVICE,
-        transport: Transport.RMQ,
-        options: {
-          urls: ['amqp://localhost:5672'],
-          queue: 'orders-queue',
-        },
+        imports: [ConfigModule],
+        useFactory: async (configService: ConfigService) => ({
+          transport: Transport.RMQ,
+          options: {
+            urls: [configService.get<string>('RABBITMQ_URL')],
+            queue: configService.get<string>('RABBITMQ_ORDER_QUEUE'),
+          },
+        }),
+        inject: [ConfigService],
       },
     ]),
   ],
