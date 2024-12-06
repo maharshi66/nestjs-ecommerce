@@ -1,4 +1,3 @@
-// order-line-item.entity.ts
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne, JoinColumn } from 'typeorm';
 import { Order } from './order.entity';
 import { Product } from './product.entity';
@@ -8,7 +7,7 @@ export class OrderLineItem {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @ManyToOne(() => Order, (order) => order.lineItems)
+  @ManyToOne(() => Order, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'order_id' })
   order: Order;
 
@@ -19,8 +18,8 @@ export class OrderLineItem {
   @Column('int')
   quantity: number;
 
-  @Column('decimal')
-  price: number;
+  @Column({ type: 'decimal', precision: 10, scale: 2 })
+  unit_price: number;
 
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   created_at: Date;

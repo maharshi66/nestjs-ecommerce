@@ -13,6 +13,7 @@ export class CustomerServiceService {
       name: 'Mock Customer',
       email: 'mock.customer@example.com',
       phone: '+123456789',
+      shipping_address: '1234 Mock St, Mock City, Mock Country',
     };
   }
 }

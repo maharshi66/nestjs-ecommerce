@@ -1,17 +1,23 @@
-// order.entity.ts
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
 import { OrderLineItem } from './order-line-item.entity';
+
+export enum OrderStatus {
+  PROCESSING = 'PROCESSING',
+  CANCELED = 'CANCELED',
+  DELIVERED = 'DELIVERED',
+}
 
 @Entity()
 export class Order {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column()
-  order_number: string;
-
-  @Column()
-  status: string;
+  @Column({
+    type: 'enum',
+    enum: OrderStatus,
+    default: OrderStatus.PROCESSING,
+  })
+  status: OrderStatus;
 
   @Column()
   shipping_address: string;
@@ -22,13 +28,15 @@ export class Order {
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP', onUpdate: 'CURRENT_TIMESTAMP' })
   updated_at: Date;
 
-  // New tracking columns
   @Column({ nullable: true })
   tracking_company: string;
 
   @Column({ nullable: true })
   tracking_number: string;
 
-  @OneToMany(() => OrderLineItem, (lineItem) => lineItem.order)
-  lineItems: OrderLineItem[];
+  @Column()
+  customer_id: string;
+
+  @Column('decimal')
+  total_amount: number;
 }

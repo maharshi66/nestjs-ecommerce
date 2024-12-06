@@ -9,7 +9,10 @@ export class Product {
   name: string;
 
   @Column('decimal')
-  price: number;
+  unit_price: number;
+
+  @Column('decimal')
+  available_quantity: number;
 
   @Column({ type: 'text', nullable: true })
   description: string;
