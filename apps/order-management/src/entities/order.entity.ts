@@ -1,5 +1,5 @@
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from 'typeorm';
-import { OrderStatus } from '../../../libs/common/constants/order-status';
+import { OrderStatus } from '../../../../libs/common/constants/order-status';
 @Entity()
 export class Order {
   @PrimaryGeneratedColumn('uuid')

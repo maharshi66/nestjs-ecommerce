@@ -1,14 +1,14 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { ClientProxy, RpcException } from '@nestjs/microservices';
-import { MESSAGE_PATTERNS } from 'apps/libs/common/constants/patterns';
-import { CUSTOMER_SERVICE, INVENTORY_SERVICE } from 'apps/libs/common/constants/services';
-import { CreateOrderDto } from 'apps/libs/common/dto/create-order.dto';
-import { UpdateOrderDto } from 'apps/libs/common/dto/update-order.dto';
+import { MESSAGE_PATTERNS } from 'libs/common/constants/patterns';
+import { CUSTOMER_SERVICE, INVENTORY_SERVICE } from 'libs/common/constants/services';
+import { CreateOrderDto } from 'libs/common/dto/create-order.dto';
+import { UpdateOrderDto } from 'libs/common/dto/update-order.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { DataSource, Repository } from 'typeorm';
 import { Order } from './entities/order.entity';
 import { OrderLineItem } from './entities/order-line-item.entity';
-import { OrderStatus } from 'apps/libs/common/constants/order-status';
+import { OrderStatus } from 'libs/common/constants/order-status';
 import { CustomerDetails } from './interfaces/customer.interface';
 import { InventoryItem } from './interfaces/inventory.interface';
 @Injectable()

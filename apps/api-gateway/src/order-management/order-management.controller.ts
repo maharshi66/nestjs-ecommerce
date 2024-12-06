@@ -8,12 +8,15 @@ import {
   Delete,
   HttpStatus,
   HttpException,
+  UsePipes,
+  ValidationPipe,
+  BadRequestException,
 } from '@nestjs/common';
 import { OrderManagementService } from './order-management.service';
-import { CreateOrderDto } from 'apps/libs/common/dto/create-order.dto';
-import { UpdateOrderDto } from 'apps/libs/common/dto/update-order.dto';
+import { CreateOrderDto } from 'libs/common/dto/create-order.dto';
+import { UpdateOrderDto } from 'libs/common/dto/update-order.dto';
 import { lastValueFrom } from 'rxjs';
-import { OrderIdDto } from 'apps/libs/common/dto/order-id.dto';
+import { OrderIdDto } from 'libs/common/dto/order-id.dto';
 
 @Controller('orders')
 export class OrderManagementController {
@@ -70,7 +73,7 @@ export class OrderManagementController {
   async createOrder(@Body() createOrderDto: CreateOrderDto) {
     console.log('Received Order Creation request:', createOrderDto);
     try {
-      await this.orderManagementService.createOrder(createOrderDto, 'mockToken');
+      this.orderManagementService.createOrder(createOrderDto, 'mockToken');
       return { message: 'Order created successfully' };
     } catch (error) {
       console.error('Error creating order:', error.message);

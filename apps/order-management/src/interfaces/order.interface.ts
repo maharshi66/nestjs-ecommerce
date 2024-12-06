@@ -1,4 +1,4 @@
-import { OrderStatus } from "apps/libs/common/constants/order-status";
+import { OrderStatus } from "libs/common/constants/order-status";
 
 export interface Order {
   customer_id: string;

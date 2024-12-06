@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { MessagePattern } from '@nestjs/microservices';
-import { MESSAGE_PATTERNS } from 'apps/libs/common/constants/patterns';
+import { MESSAGE_PATTERNS } from 'libs/common/constants/patterns';
 
 @Injectable()
 export class InventoryService {

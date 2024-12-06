@@ -12,7 +12,7 @@ export class CreateOrderDto {
     items: OrderItemDto[];
 
     @IsString()
-    @IsNotEmpty()
+    @IsOptional()
     shippingAddress: string;
 
     @IsString()

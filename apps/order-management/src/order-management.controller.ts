@@ -1,10 +1,10 @@
 import { Controller } from '@nestjs/common';
 import { EventPattern, MessagePattern } from '@nestjs/microservices';
 import { OrderManagementService } from './order-management.service';
-import { EVENT_PATTERNS, MESSAGE_PATTERNS } from 'apps/libs/common/constants/patterns';
-import { CreateOrderDto } from 'apps/libs/common/dto/create-order.dto';
-import { UpdateOrderDto } from 'apps/libs/common/dto/update-order.dto';
-import { OrderIdDto } from 'apps/libs/common/dto/order-id.dto';
+import { EVENT_PATTERNS, MESSAGE_PATTERNS } from 'libs/common/constants/patterns';
+import { CreateOrderDto } from 'libs/common/dto/create-order.dto';
+import { UpdateOrderDto } from 'libs/common/dto/update-order.dto';
+import { OrderIdDto } from 'libs/common/dto/order-id.dto';
 
 @Controller()
 export class OrderManagementController {

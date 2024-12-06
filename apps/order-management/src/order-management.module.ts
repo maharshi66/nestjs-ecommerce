@@ -3,7 +3,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { OrderManagementService } from './order-management.service';
 import { OrderManagementController } from './order-management.controller';
 import { ClientsModule, Transport } from '@nestjs/microservices';
-import { CUSTOMER_SERVICE, INVENTORY_SERVICE } from 'apps/libs/common/constants/services';
+import { CUSTOMER_SERVICE, INVENTORY_SERVICE } from 'libs/common/constants/services';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Order } from './entities/order.entity';
 import { OrderLineItem } from './entities/order-line-item.entity';
