@@ -4,6 +4,9 @@ import { OrderManagementController } from './order-management.controller';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { ORDER_MANAGEMENT_SERVICE } from 'apps/libs/common/constants/services';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { APP_INTERCEPTOR, APP_FILTER } from '@nestjs/core';
+import { ResponseInterceptor } from 'apps/libs/common/interceptors/response.interceptor';
+import { HttpExceptionFilter } from 'apps/libs/common/interceptors/http-exception.interceptor';
 
 @Module({
   imports: [
@@ -27,6 +30,15 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
     ]),
   ],
   controllers: [OrderManagementController],
-  providers: [OrderManagementService],
+  providers: [OrderManagementService,
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: ResponseInterceptor,
+    },
+    {
+      provide: APP_FILTER,
+      useClass: HttpExceptionFilter,
+    },
+  ],
 })
 export class OrderManagementModule {}

@@ -1,7 +1,19 @@
-import { Controller, Get, Put, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Put,
+  Post,
+  Body,
+  Param,
+  Delete,
+  HttpStatus,
+  HttpException,
+} from '@nestjs/common';
 import { OrderManagementService } from './order-management.service';
 import { CreateOrderDto } from 'apps/libs/common/dto/create-order.dto';
 import { UpdateOrderDto } from 'apps/libs/common/dto/update-order.dto';
+import { lastValueFrom } from 'rxjs';
+import { OrderIdDto } from 'apps/libs/common/dto/order-id.dto';
 
 @Controller('orders')
 export class OrderManagementController {
@@ -9,36 +21,109 @@ export class OrderManagementController {
 
   @Get('health-check')
   healthCheck() {
-    return { message: 'Order Management Service is up and running' };
+    console.log('Received Health Check request');
+    return { message: 'Health-Check Successful' };
   }
 
-  @Get('')
-  getAllOrders() {
+  @Get()
+  async getAllOrders() {
     console.log('Received Order Fetch request');
-    return this.orderManagementService.getAllOrders('mockToken');
+    try {
+      const orders = await lastValueFrom(this.orderManagementService.getAllOrders('mockToken'));
+      console.log('Orders:', orders);
+      return orders;
+    } catch (error) {
+      console.error('Error fetching orders:', error.message);
+      const errorMessage = error?.message || 'An unknown error occurred';
+      throw new HttpException(
+        {
+          status: 'error',
+          message: errorMessage,
+        },
+        HttpStatus.INTERNAL_SERVER_ERROR
+      );
+    }
   }
 
   @Get(':id')
-  getOrderById(@Param('id') orderId: string) {
+  async getOrderById(@Param('id') orderId: OrderIdDto) {
     console.log('Received Order Fetch request for ID:', orderId);
-    return this.orderManagementService.getOrderById(orderId, 'mockToken');
+    try {
+      const order = await lastValueFrom(
+        this.orderManagementService.getOrderById(orderId, 'mockToken')
+      );
+      return order;
+    } catch (error) {
+      console.error('Error fetching order:', error.message);
+      const errorMessage = error?.message || 'An unknown error occurred';
+      throw new HttpException(
+        {
+          status: 'error',
+          message: errorMessage,
+        },
+        HttpStatus.NOT_FOUND
+      );
+    }
   }
 
-  @Post('')
-  createOrder(@Body() createOrderDto: CreateOrderDto) {
+  @Post()
+  async createOrder(@Body() createOrderDto: CreateOrderDto) {
     console.log('Received Order Creation request:', createOrderDto);
-    return this.orderManagementService.createOrder(createOrderDto, 'mockToken');
+    try {
+      await this.orderManagementService.createOrder(createOrderDto, 'mockToken');
+      return { message: 'Order created successfully' };
+    } catch (error) {
+      console.error('Error creating order:', error.message);
+      const errorMessage = error?.message || 'An unknown error occurred';
+      throw new HttpException(
+        {
+          status: 'error',
+          message: errorMessage,
+        },
+        HttpStatus.INTERNAL_SERVER_ERROR
+      );
+    }
   }
 
   @Put(':id')
-  updateOrder(@Param('id') orderId: string, @Body() updateOrderDto: UpdateOrderDto) {
+  async updateOrder(
+    @Param('id') orderId: OrderIdDto,
+    @Body() updateOrderDto: UpdateOrderDto,
+  ) {
     console.log('Received Order Update request for ID:', orderId);
-    return this.orderManagementService.updateOrder(orderId, updateOrderDto, 'mockToken');
+    try {
+      const res = lastValueFrom(this.orderManagementService.updateOrder(orderId, updateOrderDto, 'mockToken'));
+      return res;
+    } catch (error) {
+      console.error('Error updating order:', error.message);
+      const errorMessage = error?.message || 'An unknown error occurred';
+      throw new HttpException(
+        {
+          status: 'error',
+          message: errorMessage,
+        },
+        HttpStatus.INTERNAL_SERVER_ERROR
+      );
+    }
   }
 
   @Delete(':id')
-  deleteOrder(@Param('id') orderId: string) {
+  async deleteOrder(@Param('id') orderId: OrderIdDto) {
     console.log('Received Order Delete request for ID:', orderId);
-    return this.orderManagementService.deleteOrder(orderId, 'mockToken');
+    try {
+      const order = await lastValueFrom(this.orderManagementService.deleteOrder(orderId, 'mockToken'));
+      console.log(order)
+      return order;
+    } catch (error) {
+      console.error('Error deleting order:', error.message);
+      const errorMessage = error?.message || 'An unknown error occurred';
+      throw new HttpException(
+        {
+          status: 'error',
+          message: errorMessage,
+        },
+        HttpStatus.INTERNAL_SERVER_ERROR
+      );
+    }
   }
 }

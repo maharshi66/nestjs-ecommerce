@@ -4,6 +4,7 @@ import { OrderManagementService } from './order-management.service';
 import { EVENT_PATTERNS, MESSAGE_PATTERNS } from 'apps/libs/common/constants/patterns';
 import { CreateOrderDto } from 'apps/libs/common/dto/create-order.dto';
 import { UpdateOrderDto } from 'apps/libs/common/dto/update-order.dto';
+import { OrderIdDto } from 'apps/libs/common/dto/order-id.dto';
 
 @Controller()
 export class OrderManagementController {
@@ -16,7 +17,7 @@ export class OrderManagementController {
   }
 
   @MessagePattern({ cmd: MESSAGE_PATTERNS.GET_ORDER_BY_ID })
-  handleGetOrderById(orderId: string) {
+  handleGetOrderById(orderId: OrderIdDto) {
     console.log('Fetch order by ID request received');
     return this.orderManagementService.handleGetOrderById(orderId);
   }
@@ -27,14 +28,14 @@ export class OrderManagementController {
     return this.orderManagementService.handleCreateOrder(order);
   }
 
-  @EventPattern({ cmd: EVENT_PATTERNS.UPDATE_ORDER })
+  @MessagePattern({ cmd: MESSAGE_PATTERNS.UPDATE_ORDER })
   handleUpdateOrder(order: UpdateOrderDto) {
     console.log('Order update request received');
     return this.orderManagementService.handleOrderUpdate(order);
   }
 
-  @EventPattern({ cmd: EVENT_PATTERNS.DELETE_ORDER })
-  handleDeleteOrder(orderId: string) {
+  @MessagePattern({ cmd: MESSAGE_PATTERNS.DELETE_ORDER })
+  handleDeleteOrder(orderId: OrderIdDto) {
     console.log('Order delete request received');
     return this.orderManagementService.handleDeleteOrder(orderId);
   }

@@ -3,6 +3,7 @@ import { ClientProxy } from '@nestjs/microservices';
 import { EVENT_PATTERNS, MESSAGE_PATTERNS } from 'apps/libs/common/constants/patterns';
 import { ORDER_MANAGEMENT_SERVICE } from 'apps/libs/common/constants/services';
 import { CreateOrderDto } from 'apps/libs/common/dto/create-order.dto';
+import { OrderIdDto } from 'apps/libs/common/dto/order-id.dto';
 import { UpdateOrderDto } from 'apps/libs/common/dto/update-order.dto';
 @Injectable()
 export class OrderManagementService {
@@ -14,10 +15,10 @@ export class OrderManagementService {
     const messagePayload = {
       customerId: decodedToken.customerId,
     };
-    return this.orderManagementClient.send({ cmd: 'order.get.all' }, messagePayload);
+    return this.orderManagementClient.send({ cmd: MESSAGE_PATTERNS.GET_ALL_ORDERS }, messagePayload);
   }
 
-  getOrderById(@Param('id') orderId: string, @Headers() authToken: string) {
+  getOrderById(@Param('id') orderId: OrderIdDto, @Headers() authToken: string) {
     const decodedToken = { customerId: 'CUST01' }; //Mock decoded token for now, in production this will be decoded from the JWT token
 
     const messagePayload = {
@@ -38,7 +39,7 @@ export class OrderManagementService {
     return { message: 'Order created successfully' };
   }
 
-  updateOrder(@Param('id') orderId: string, @Body() updateOrder: UpdateOrderDto, @Headers() authToken: string) {
+  updateOrder(@Param('id') orderId: OrderIdDto, @Body() updateOrder: UpdateOrderDto, @Headers() authToken: string) {
     const decodedToken = { customerId: 'CUST01' }; // Mock decoded token for now, in production this will be decoded from the JWT token
 
     const messagePayload = {
@@ -47,11 +48,10 @@ export class OrderManagementService {
       ...updateOrder,
     };
 
-    this.orderManagementClient.emit({ cmd: EVENT_PATTERNS.UPDATE_ORDER }, messagePayload);
-    return { message: 'Order updated successfully' };
+    return this.orderManagementClient.send({ cmd: MESSAGE_PATTERNS.UPDATE_ORDER }, messagePayload);
   }
 
-  deleteOrder(@Param('id') orderId: string, @Headers() authToken: string) {
+  deleteOrder(@Param('id') orderId: OrderIdDto, @Headers() authToken: string) {
     const decodedToken = { customerId: 'CUST01' }; // Mock decoded token for now, in production this will be decoded from the JWT token
 
     const messagePayload = {
@@ -59,7 +59,6 @@ export class OrderManagementService {
       orderId,
     };
 
-    this.orderManagementClient.emit({ cmd: EVENT_PATTERNS.DELETE_ORDER }, messagePayload);
-    return { message: 'Order deleted successfully' };
+    return this.orderManagementClient.send({ cmd: MESSAGE_PATTERNS.DELETE_ORDER }, messagePayload);
   }
 }
