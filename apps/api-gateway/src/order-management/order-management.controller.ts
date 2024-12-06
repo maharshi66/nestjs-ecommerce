@@ -7,6 +7,11 @@ import { UpdateOrderDto } from 'apps/libs/common/dto/update-order.dto';
 export class OrderManagementController {
   constructor(private readonly orderManagementService: OrderManagementService) {}
 
+  @Get('health-check')
+  healthCheck() {
+    return { message: 'Order Management Service is up and running' };
+  }
+
   @Get('')
   getAllOrders() {
     console.log('Received Order Fetch request');

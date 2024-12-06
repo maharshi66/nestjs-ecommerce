@@ -1,0 +1,80 @@
+version: '3.8'
+services:
+  api-gateway:
+    build:
+      context: .
+      dockerfile: Dockerfile.api-gateway
+    ports:
+      - '3000:3000' # Expose your API Gateway service on a different port (3001)
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    command: npm run start:api-gateway # Adjust for your app's entry point
+    env_file:
+      - .env # Load environment variables from the .env file
+    depends_on:
+      - rmq # Ensure RabbitMQ is started before the app
+
+  order-management:
+    build:
+      context: .
+      dockerfile: Dockerfile.order-management
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    command: npm run start:order-management
+    env_file:
+      - .env
+    depends_on:
+      - rmq
+      - postgres-db
+
+  customer-service:
+    build:
+      context: .
+      dockerfile: Dockerfile.customer-service
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    command: npm run start:customer-service
+    env_file:
+      - .env
+    depends_on:
+      - rmq
+
+  inventory-service:
+    build:
+      context: .
+      dockerfile: Dockerfile.inventory-service
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    command: npm run start:inventory-service
+    env_file:
+      - .env
+    depends_on:
+      - rmq
+
+  rmq:
+    image: rabbitmq:3-management
+    ports:
+      - '5673:5672' # Avoid conflict with local RabbitMQ
+      - '15673:15672' # Management UI on a different port
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+
+  postgres-db:
+    image: postgres:15
+    container_name: ecommerce-postgres
+    ports:
+      - '5433:5432' # Avoid conflict with local PostgreSQL (running on 5432)
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: ecommerce
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+
+volumes:
+  postgres-data:

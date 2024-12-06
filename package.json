@@ -17,7 +17,11 @@
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "jest --config ./apps/ecommerce/test/jest-e2e.json"
+    "test:e2e": "jest --config ./apps/ecommerce/test/jest-e2e.json",
+    "start:api-gateway": "nest start api-gateway",
+    "start:order-management": "nest start order-management",
+    "start:inventory-service": "nest start inventory-service",
+    "start:customer-service": "nest start customer-service"
   },
   "dependencies": {
     "@faker-js/faker": "^9.3.0",
