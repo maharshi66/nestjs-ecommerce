@@ -9,8 +9,8 @@ import { DataSource, Repository } from 'typeorm';
 import { Order } from './entities/order.entity';
 import { OrderLineItem } from './entities/order-line-item.entity';
 import { OrderStatus } from 'libs/common/constants/order-status';
-import { CustomerDetails } from './interfaces/customer.interface';
-import { InventoryItem } from './interfaces/inventory.interface';
+import { CustomerDetails } from 'libs/common/interfaces/customer.interface';
+import { InventoryItem } from 'libs/common/interfaces/inventory.interface';
 @Injectable()
 export class OrderManagementService {
   constructor(
