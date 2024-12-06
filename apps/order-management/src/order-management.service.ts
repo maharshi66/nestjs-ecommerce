@@ -9,6 +9,8 @@ import { DataSource, Repository } from 'typeorm';
 import { Order } from './entities/order.entity';
 import { OrderLineItem } from './entities/order-line-item.entity';
 import { OrderStatus } from 'apps/libs/common/constants/order-status';
+import { CustomerDetails } from './interfaces/customer.interface';
+import { InventoryItem } from './interfaces/inventory.interface';
 @Injectable()
 export class OrderManagementService {
   constructor(
@@ -55,40 +57,31 @@ export class OrderManagementService {
     console.log(`Received a new order - customer: ${order}`);
 
     try {
-      const customerDetails = await this.customerClient.send(MESSAGE_PATTERNS.GET_CUSTOMER_DETAILS, order.customerId).toPromise();
+      const customerDetails:CustomerDetails = await this.customerClient.send(MESSAGE_PATTERNS.GET_CUSTOMER_DETAILS, order.customerId).toPromise();
       console.log('Customer details:', customerDetails);
 
-      const inventoryDetails = await this.inventoryClient.send(MESSAGE_PATTERNS.GET_INVENTORY_DETAILS, order.items).toPromise();
+      const inventoryDetails: InventoryItem[] = await this.inventoryClient.send(MESSAGE_PATTERNS.GET_INVENTORY_DETAILS, order.items).toPromise();
       console.log('Inventory details:', inventoryDetails);
 
-      const products = inventoryDetails.map((inventory) => {
-        const { id, requested_quantity } = inventory;
+      const lineItems: Partial<OrderLineItem>[] = inventoryDetails.map((inventoryItem: InventoryItem) => {
+        const { id, requested_quantity, unit_price } = inventoryItem;
         return {
           product_id: id,
-          product_name: inventory.name,
           quantity: requested_quantity,
-          unit_price: inventory.unit_price,
+          unit_price: unit_price,
         };
       });
 
-      // Calculate total amount
-      const totalAmount = products.reduce(
-        (total, product) => total + product.quantity * product.unit_price,
+      const totalAmount = lineItems.reduce(
+        (total: number, item: { quantity: number; unit_price: number }) => total + item.quantity * item.unit_price,
         0,
       );
-      const lineItems = inventoryDetails.map((inventory) => ({
-        product_id: inventory.id,
-        product_name: inventory.name,
-        quantity: inventory.requested_quantity,
-        unit_price: inventory.unit_price,
-      }));
 
       const queryRunner = this.dataSource.createQueryRunner();
       await queryRunner.connect();
       await queryRunner.startTransaction();
 
       try {
-        // Save the order
         const savedOrder = await queryRunner.manager.save(Order, {
           customer_id: customerDetails.id,
           shipping_address: customerDetails.shipping_address,
@@ -98,11 +91,9 @@ export class OrderManagementService {
 
         console.log('Order saved:', savedOrder);
 
-        // Save order line items
         const orderLineItems = lineItems.map((item) => ({
           order: savedOrder,
-          product_id: item.product_id,
-          product_name: item.product_name,
+          product_id: item.id,
           quantity: item.quantity,
           unit_price: item.unit_price,
         }));

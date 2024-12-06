@@ -15,7 +15,7 @@ export class InventoryService {
       const unitPrice = Math.floor(Math.random() * 500) + 50; // Mock price between 50 and 500
 
       return {
-        id: item.productId,
+        id: `${crypto.randomUUID()}`,
         name: `Mock Product ${item.productId}`,
         description: `Mock Description for product ${item.productId}`,
         quantity_available: quantityAvailable,
