@@ -9,7 +9,6 @@ import { DataSource, Repository } from 'typeorm';
 import { Order } from './entities/order.entity';
 import { OrderLineItem } from './entities/order-line-item.entity';
 import { OrderStatus } from 'apps/libs/common/constants/order-status';
-
 @Injectable()
 export class OrderManagementService {
   constructor(
@@ -159,8 +158,7 @@ export class OrderManagementService {
     }
   }
 
-  async handleDeleteOrder(deleteOrderDto: any) {
-    const { orderId } = deleteOrderDto;
+  async handleDeleteOrder(orderId: string) {
     console.log(`Deleting order - ID: ${orderId}`);
 
     try {

@@ -35,7 +35,7 @@ export class OrderManagementController {
   }
 
   @MessagePattern({ cmd: MESSAGE_PATTERNS.DELETE_ORDER })
-  handleDeleteOrder(orderId: OrderIdDto) {
+  handleDeleteOrder(orderId: string) {
     console.log('Order delete request received');
     return this.orderManagementService.handleDeleteOrder(orderId);
   }
