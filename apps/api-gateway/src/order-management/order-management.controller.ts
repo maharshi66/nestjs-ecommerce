@@ -7,6 +7,18 @@ import { UpdateOrderDto } from 'apps/libs/common/dto/update-order.dto';
 export class OrderManagementController {
   constructor(private readonly orderManagementService: OrderManagementService) {}
 
+  @Get('')
+  getAllOrders() {
+    console.log('Received Order Fetch request');
+    return this.orderManagementService.getAllOrders('mockToken');
+  }
+
+  @Get(':id')
+  getOrderById(@Param('id') orderId: string) {
+    console.log('Received Order Fetch request for ID:', orderId);
+    return this.orderManagementService.getOrderById(orderId, 'mockToken');
+  }
+
   @Post('')
   createOrder(@Body() createOrderDto: CreateOrderDto) {
     console.log('Received Order Creation request:', createOrderDto);

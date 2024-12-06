@@ -19,6 +19,38 @@ export class OrderManagementService {
     private readonly dataSource: DataSource,
   ) {}
 
+  async handleGetAllOrders() {
+    console.log('Fetching all orders');
+
+    try {
+      const orders = await this.orderRepository.find();
+      console.log('Orders:', orders);
+      return orders;
+    } catch (error) {
+      console.error('Error fetching orders:', error.message);
+      throw error;
+    }
+  }
+
+  async handleGetOrderById(getOrderByIdDto: any) {
+    const { orderId } = getOrderByIdDto;
+    console.log(`Fetching order by ID: ${orderId}`);
+
+    try {
+      const order = await this.orderRepository.findOne({ where: { id: orderId } });
+
+      if (!order) {
+        throw new Error(`Order with ID ${orderId} not found`);
+      }
+
+      console.log('Order:', order);
+      return order;
+    } catch (error) {
+      console.error('Error fetching order:', error.message);
+      throw error;
+    }
+  }
+
   async handleCreateOrder(order: CreateOrderDto) {
     console.log(`Received a new order - customer: ${order}`);
 

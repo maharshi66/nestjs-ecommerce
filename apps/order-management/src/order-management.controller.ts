@@ -1,13 +1,25 @@
 import { Controller } from '@nestjs/common';
-import { EventPattern } from '@nestjs/microservices';
+import { EventPattern, MessagePattern } from '@nestjs/microservices';
 import { OrderManagementService } from './order-management.service';
-import { EVENT_PATTERNS } from 'apps/libs/common/constants/patterns';
+import { EVENT_PATTERNS, MESSAGE_PATTERNS } from 'apps/libs/common/constants/patterns';
 import { CreateOrderDto } from 'apps/libs/common/dto/create-order.dto';
 import { UpdateOrderDto } from 'apps/libs/common/dto/update-order.dto';
 
 @Controller()
 export class OrderManagementController {
   constructor(private readonly orderManagementService: OrderManagementService) {}
+
+  @MessagePattern({ cmd: MESSAGE_PATTERNS.GET_ALL_ORDERS })
+  handleGetAllOrders() {
+    console.log('Fetch all orders request received');
+    return this.orderManagementService.handleGetAllOrders();
+  }
+
+  @MessagePattern({ cmd: MESSAGE_PATTERNS.GET_ORDER_BY_ID })
+  handleGetOrderById(orderId: string) {
+    console.log('Fetch order by ID request received');
+    return this.orderManagementService.handleGetOrderById(orderId);
+  }
 
   @EventPattern({ cmd: EVENT_PATTERNS.CREATE_ORDER })
   handleCreateOrder(order: CreateOrderDto) {
