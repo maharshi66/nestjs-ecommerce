@@ -66,7 +66,7 @@ export class OrderManagementService {
       const lineItems: Partial<OrderLineItem>[] = inventoryDetails.map((inventoryItem: InventoryItem) => {
         const { id, requested_quantity, unit_price } = inventoryItem;
         return {
-          product_id: id,
+          id,
           quantity: requested_quantity,
           unit_price: unit_price,
         };
