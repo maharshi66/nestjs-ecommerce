@@ -13,6 +13,7 @@ This monorepo project is a microservices-based architecture implemented using Ne
 - [Known Limitations](#known-limitations)
 - [Future Improvements](#future-improvements)
 - [Assumptions](#assumptions)
+- [Locally Run Project](#locally-run-project)
 
 ---
 
@@ -74,29 +75,42 @@ nestjs-microservices/
 └── package.json           # Project dependencies and scripts
 ```
 
-## Assumptions
+## Locally Run Project
 
-- The API Gateway will handle all external HTTP requests and route them appropriately.
-- RabbitMQ is used for asynchronous communication between services.
-- TypeORM is used for database operations with Postgres as the database.
-- Mocked services will be replaced with real implementations in the future.
-- The system is designed to be scalable and handle high volumes of orders.
+Follow these steps to run the project locally using Docker Compose:
 
+1. **Clone the Repository**  
+   Clone the project repository to your local machine
 
----
+2. **Set Environment Variables**  
+   Ensure the `.env` file is present in the project root directory
 
-## Known Limitations
+   ```env
+   DB_HOST=postgres-db
+   DB_NAME=ecommerce
+   DB_USER=postgres
+   DB_PASSWORD=postgres
+   RABBITMQ_URL=amqp://host.docker.internal:5672
+   RABBITMQ_ORDER_QUEUE=order-queue
+   RABBITMQ_CUSTOMER_INFO_QUEUE=customer-info-queue
+   RABBITMQ_INVENTORY_INFO_QUEUE=inventory-info-queue
+   ```
 
-- Mocked Services: The Customer and Inventory services currently provide mocked responses. Full integration with real data sources is pending.
-- Error Handling: Comprehensive error handling and retry mechanisms need to be implemented for robust operation.
+3. **Build and Start Services**  
+   Build and start the services using Docker Compose:
 
----
+   ```bash
+   docker-compose up --build
+   ```
 
-## Future Improvements
+4. **Access the APIs**
 
-- Real Data Integration: Replace mocked responses in Customer and Inventory services with actual data sources.
-- Load Testing: Conduct extensive load testing to ensure the system can handle high traffic and large volumes of orders.
-- Enhanced Error Handling: Implement advanced error handling and retry logic to improve system reliability.
-- Monitoring and Logging: Integrate monitoring and logging tools to track system performance and diagnose issues.
+   - API Gateway: [http://localhost:3000/api/v1/orders/health-check](http://localhost:3000)
+
+5. **Stop the Services**  
+   To stop the services, press `Ctrl+C` in the terminal and then run:
+   ```bash
+   docker-compose down
+   ```
 
 ---
