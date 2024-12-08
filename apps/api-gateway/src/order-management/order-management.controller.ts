@@ -21,7 +21,7 @@ export class OrderManagementController {
   @Get('health-check')
   healthCheck() {
     console.log('Received Health Check request');
-    return { message: 'Health-Check Successful' };
+    return { status: 'success', message: 'Health-Check Successful', data: null };
   }
 
   @Get()
@@ -30,7 +30,7 @@ export class OrderManagementController {
     try {
       const orders = await lastValueFrom(this.orderManagementService.getAllOrders('mockToken'));
       console.log('Orders:', orders);
-      return orders;
+      return { status: 'success', message: 'Orders fetched successfully', data: orders };
     } catch (error) {
       console.error('Error fetching orders:', error.message);
       const errorMessage = error?.message || 'An unknown error occurred';
@@ -38,6 +38,7 @@ export class OrderManagementController {
         {
           status: 'error',
           message: errorMessage,
+          data: null,
         },
         HttpStatus.INTERNAL_SERVER_ERROR
       );
@@ -51,7 +52,7 @@ export class OrderManagementController {
       const order = await lastValueFrom(
         this.orderManagementService.getOrderById(orderId, 'mockToken')
       );
-      return order;
+      return { status: 'success', message: 'Order fetched successfully', data: order };
     } catch (error) {
       console.error('Error fetching order:', error.message);
       const errorMessage = error?.message || 'An unknown error occurred';
@@ -59,6 +60,7 @@ export class OrderManagementController {
         {
           status: 'error',
           message: errorMessage,
+          data: null,
         },
         HttpStatus.NOT_FOUND
       );
@@ -70,7 +72,7 @@ export class OrderManagementController {
     console.log('Received Order Creation request:', createOrderDto);
     try {
       this.orderManagementService.createOrder(createOrderDto, 'mockToken');
-      return { message: 'Order created successfully' };
+      return { status: 'success', message: 'Order created successfully', data: null};
     } catch (error) {
       console.error('Error creating order:', error.message);
       const errorMessage = error?.message || 'An unknown error occurred';
@@ -78,6 +80,7 @@ export class OrderManagementController {
         {
           status: 'error',
           message: errorMessage,
+          data: null,
         },
         HttpStatus.INTERNAL_SERVER_ERROR
       );
@@ -88,8 +91,8 @@ export class OrderManagementController {
   async updateOrder(@Param('id') orderId: string, @Body() updateOrderDto: UpdateOrderDto) {
     console.log('Received Order Update request for ID:', orderId);
     try {
-      const res = lastValueFrom(this.orderManagementService.updateOrder(orderId, updateOrderDto, 'mockToken'));
-      return res;
+      const order = await lastValueFrom(this.orderManagementService.updateOrder(orderId, updateOrderDto, 'mockToken'));
+      return { status: 'success', message: 'Order updated successfully', data: order };
     } catch (error) {
       console.error('Error updating order:', error.message);
       const errorMessage = error?.message || 'An unknown error occurred';
@@ -97,6 +100,7 @@ export class OrderManagementController {
         {
           status: 'error',
           message: errorMessage,
+          data: null,
         },
         HttpStatus.INTERNAL_SERVER_ERROR
       );
@@ -108,8 +112,7 @@ export class OrderManagementController {
     console.log('Received Order Delete request for ID:', orderId);
     try {
       const order = await lastValueFrom(this.orderManagementService.deleteOrder(orderId, 'mockToken'));
-      console.log(order)
-      return order;
+      return { status: 'success', message: 'Order deleted successfully', data: order };
     } catch (error) {
       console.error('Error deleting order:', error.message);
       const errorMessage = error?.message || 'An unknown error occurred';
@@ -117,6 +120,7 @@ export class OrderManagementController {
         {
           status: 'error',
           message: errorMessage,
+          data: null,
         },
         HttpStatus.INTERNAL_SERVER_ERROR
       );

@@ -10,9 +10,6 @@ This monorepo project is a microservices-based architecture implemented using Ne
 - [Scope](#scope)
 - [Folder Structure](#folder-structure)
 - [Example Flow: Create Order](#example-flow-create-order)
-- [Known Limitations](#known-limitations)
-- [Future Improvements](#future-improvements)
-- [Assumptions](#assumptions)
 - [Locally Run Project](#locally-run-project)
 
 ---
