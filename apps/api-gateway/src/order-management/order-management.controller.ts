@@ -8,15 +8,11 @@ import {
   Delete,
   HttpStatus,
   HttpException,
-  UsePipes,
-  ValidationPipe,
-  BadRequestException,
 } from '@nestjs/common';
 import { OrderManagementService } from './order-management.service';
 import { CreateOrderDto } from 'libs/common/dto/create-order.dto';
 import { UpdateOrderDto } from 'libs/common/dto/update-order.dto';
 import { lastValueFrom } from 'rxjs';
-import { OrderIdDto } from 'libs/common/dto/order-id.dto';
 
 @Controller('orders')
 export class OrderManagementController {
@@ -49,7 +45,7 @@ export class OrderManagementController {
   }
 
   @Get(':id')
-  async getOrderById(@Param('id') orderId: OrderIdDto) {
+  async getOrderById(@Param('id') orderId: string) {
     console.log('Received Order Fetch request for ID:', orderId);
     try {
       const order = await lastValueFrom(
@@ -89,10 +85,7 @@ export class OrderManagementController {
   }
 
   @Put(':id')
-  async updateOrder(
-    @Param('id') orderId: OrderIdDto,
-    @Body() updateOrderDto: UpdateOrderDto,
-  ) {
+  async updateOrder(@Param('id') orderId: string, @Body() updateOrderDto: UpdateOrderDto) {
     console.log('Received Order Update request for ID:', orderId);
     try {
       const res = lastValueFrom(this.orderManagementService.updateOrder(orderId, updateOrderDto, 'mockToken'));
@@ -111,7 +104,7 @@ export class OrderManagementController {
   }
 
   @Delete(':id')
-  async deleteOrder(@Param('id') orderId: OrderIdDto) {
+  async deleteOrder(@Param('id') orderId: string) {
     console.log('Received Order Delete request for ID:', orderId);
     try {
       const order = await lastValueFrom(this.orderManagementService.deleteOrder(orderId, 'mockToken'));

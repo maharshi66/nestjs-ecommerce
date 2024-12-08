@@ -11,6 +11,7 @@ import { OrderLineItem } from './entities/order-line-item.entity';
 import { OrderStatus } from 'libs/common/constants/order-status';
 import { CustomerDetails } from 'libs/common/interfaces/customer.interface';
 import { InventoryItem } from 'libs/common/interfaces/inventory.interface';
+import { OrderIdDto } from 'libs/common/dto/order-id.dto';
 @Injectable()
 export class OrderManagementService {
   constructor(
@@ -21,8 +22,8 @@ export class OrderManagementService {
     private readonly dataSource: DataSource,
   ) {}
 
-  async handleGetAllOrders() {
-    console.log('Fetching all orders');
+  async handleGetAllOrders(customerId: string) {
+    console.log(`Fetching all orders for customer: ${customerId}`);
 
     try {
       const orders = await this.orderRepository.find();
@@ -34,8 +35,7 @@ export class OrderManagementService {
     }
   }
 
-  async handleGetOrderById(getOrderByIdDto: any) {
-    const { orderId } = getOrderByIdDto;
+  async handleGetOrderById(orderId: string) {
     console.log(`Fetching order by ID: ${orderId}`);
 
     try {

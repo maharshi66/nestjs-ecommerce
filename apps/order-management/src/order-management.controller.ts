@@ -11,13 +11,13 @@ export class OrderManagementController {
   constructor(private readonly orderManagementService: OrderManagementService) {}
 
   @MessagePattern({ cmd: MESSAGE_PATTERNS.GET_ALL_ORDERS })
-  handleGetAllOrders() {
+  handleGetAllOrders(customerId: string) {
     console.log('Fetch all orders request received');
-    return this.orderManagementService.handleGetAllOrders();
+    return this.orderManagementService.handleGetAllOrders(customerId);
   }
 
   @MessagePattern({ cmd: MESSAGE_PATTERNS.GET_ORDER_BY_ID })
-  handleGetOrderById(orderId: OrderIdDto) {
+  handleGetOrderById(orderId: string) {
     console.log('Fetch order by ID request received');
     return this.orderManagementService.handleGetOrderById(orderId);
   }

@@ -11,26 +11,16 @@ export class OrderManagementService {
 
   getAllOrders(@Headers() authToken: string) {
     const decodedToken = { customerId: 'CUST01' }; //Mock decoded token for now, in production this will be decoded from the JWT token
-
-    const messagePayload = {
-      customerId: decodedToken.customerId,
-    };
-    return this.orderManagementClient.send({ cmd: MESSAGE_PATTERNS.GET_ALL_ORDERS }, messagePayload);
+    return this.orderManagementClient.send({ cmd: MESSAGE_PATTERNS.GET_ALL_ORDERS }, decodedToken.customerId);
   }
 
-  getOrderById(@Param('id') orderId: OrderIdDto, @Headers() authToken: string) {
+  getOrderById(@Param('id') orderId: string, @Headers() authToken: string) {
     const decodedToken = { customerId: 'CUST01' }; //Mock decoded token for now, in production this will be decoded from the JWT token
-
-    const messagePayload = {
-      customerId: decodedToken.customerId,
-      orderId,
-    };
-    return this.orderManagementClient.send({ cmd: MESSAGE_PATTERNS.GET_ORDER_BY_ID }, messagePayload);
+    return this.orderManagementClient.send({ cmd: MESSAGE_PATTERNS.GET_ORDER_BY_ID }, orderId);
   }
 
   createOrder(@Body() createOrder: CreateOrderDto,@Headers() authToken: string) {
     const decodedToken = { customerId: 'CUST01' }; //Mock decoded token for now, in production this will be decoded from the JWT token
-
     const messagePayload = {
       customerId: decodedToken.customerId,
       ...createOrder,
@@ -39,11 +29,9 @@ export class OrderManagementService {
     return { message: 'Order created successfully' };
   }
 
-  updateOrder(@Param('id') orderId: OrderIdDto, @Body() updateOrder: UpdateOrderDto, @Headers() authToken: string) {
+  updateOrder(@Param('id') orderId: string, @Body() updateOrder: UpdateOrderDto, @Headers() authToken: string) {
     const decodedToken = { customerId: 'CUST01' }; // Mock decoded token for now, in production this will be decoded from the JWT token
-
     const messagePayload = {
-      customerId: decodedToken.customerId,
       orderId,
       ...updateOrder,
     };
@@ -51,14 +39,8 @@ export class OrderManagementService {
     return this.orderManagementClient.send({ cmd: MESSAGE_PATTERNS.UPDATE_ORDER }, messagePayload);
   }
 
-  deleteOrder(@Param('id') orderId: OrderIdDto, @Headers() authToken: string) {
+  deleteOrder(@Param('id') orderId: string, @Headers() authToken: string) {
     const decodedToken = { customerId: 'CUST01' }; // Mock decoded token for now, in production this will be decoded from the JWT token
-
-    const messagePayload = {
-      customerId: decodedToken.customerId,
-      orderId,
-    };
-
-    return this.orderManagementClient.send({ cmd: MESSAGE_PATTERNS.DELETE_ORDER }, messagePayload);
+    return this.orderManagementClient.send({ cmd: MESSAGE_PATTERNS.DELETE_ORDER }, orderId);
   }
 }

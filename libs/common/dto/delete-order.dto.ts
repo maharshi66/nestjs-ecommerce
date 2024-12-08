@@ -4,4 +4,7 @@ export class DeleteOrderDto {
     @IsString()
     @IsNotEmpty()
     orderId: string;
+
+    @IsString()
+    customerId: string;
 }
