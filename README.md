@@ -83,6 +83,7 @@ Follow these steps to run the project locally using Docker Compose:
    Ensure the `.env` file is present in the project root directory
 
    ```env
+   NODE_ENV=development
    DB_HOST=postgres-db
    DB_NAME=ecommerce
    DB_USER=postgres
